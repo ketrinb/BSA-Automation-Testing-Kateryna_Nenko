@@ -1,0 +1,5 @@
+class ChatsPage {
+    constructor() {
+        
+    }
+}
