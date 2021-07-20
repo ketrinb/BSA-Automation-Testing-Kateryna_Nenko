@@ -1,3 +1,11 @@
+//Test 5. The admin goes to the Clinics page. He should be able to add the new clinic to the list of the clinic.
+//Preconditions: user should be sign in on the site (email:john_admin1@admin.com, password:Pa55word)
+//1.Click Clinics link
+// 2. Click the Add button
+// 3. Fill the form with data: clinics name (Romashka), clinics address (Forest st., 5), select status (private), select city (New York, NY).
+//4. Click the Add button
+// Expected result: The clinic Romashka is created and displayed on the site.
+
 const { expect } = require('chai');
 const { App } = require('../src/pages');
 const rundomNumber = () => Date.now();
