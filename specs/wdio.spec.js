@@ -4,71 +4,7 @@ const rundomNumber = () => Date.now();
 
 const app = new App();
 
-describe('Registration:', function () {
-  beforeEach(async function () {
-    await browser.setWindowSize(1440, 960);
-    await browser.url('/sign-up');
-  });
-
-  afterEach(async function () {
-    await browser.reloadSession();
-  });
-
-  xit('should be able to register doctor', async function () {
-    await app.authPage.register({
-      name: `John${rundomNumber()}`,
-      surname: 'Doctor',
-      email: `marcus${rundomNumber()}@gmail.com`,
-      password: 'Pa55word',
-      phone: '380999999',
-      birthDate: '11/11/2000',
-      status: 'doctor',
-      gender: 'female',
-    });
-
-    await browser.waitUntil(
-      async function () {
-        const url = await browser.getUrl();
-        return url === 'http://46.101.234.121/doctors';
-      },
-      { timeout: 5000 },
-    );
-
-    const url = await browser.getUrl();
-    expect(url).to.be.eql('http://46.101.234.121/doctors');
-  });
-
-  xit('should be able to register patient', async function () {
-    await app.authPage.register({
-      name: `John${rundomNumber()}`,
-      surname: 'Patient',
-      email: `marcus${rundomNumber()}@gmail.com`,
-      password: 'Pa55word',
-      phone: '380999999',
-      birthDate: '11/11/2000',
-      status: 'patient',
-      gender: 'male',
-    });
-
-    await browser.waitUntil(
-      async function () {
-        const url = await browser.getUrl();
-        return url === 'http://46.101.234.121/doctors';
-      },
-      { timeout: 5000 },
-    );
-
-    const url = await browser.getUrl();
-    expect(url).to.be.eql('http://46.101.234.121/doctors');
-  });
- 
-  const { expect } = require('chai');
-const { App } = require('../src/pages');
-const rundomNumber = () => Date.now();
-
-const app = new App();
-
-describe('Sign in:', function () {
+describe('Profile Editing:', function () {
   beforeEach(async function () {
     await browser.setWindowSize(1440, 960);
     await browser.url('/sign-in');
@@ -77,40 +13,66 @@ describe('Sign in:', function () {
   afterEach(async function () {
     await browser.reloadSession();
   });
-
-  xit('should be able to log in', async function () {
+  
+  it('should be able to change profile data', async function () {
+      
     await app.authPage.login({
-     email: 'john_admin2@admin.com',
-     password: 'Pa55word',
-    });
+        email: 'john_admin2@admin.com',
+        password: 'Pa55word',
+       });
 
-    await browser.waitUntil(
-      async function () {
+        const myProfileLink = await $('a[href="/user-profile/aa5058a3-3e09-4db4-b8fb-2232cc612265"]');        
+        await myProfileLink.click();
+    
+         await app.profilePage.editing ({
+          name: `Anna`,
+                
+      });
+      const myName = $('input[name="name"]');
+      expect(myName).toHaveValueContaining('Anna');
+    
+    
+      xit('should be able to choose specialty and clinic', async function () {
+    
+        await app.authPage.login({
+          email: 'john_admin2@admin.com',
+          password: 'Pa55word',
+        });
+          
+        await browser.waitUntil(
+        async function () {
         const url = await browser.getUrl();
         return url === 'http://46.101.234.121/doctors';
       },
       { timeout: 5000 },
-    );
-
-    const url = await browser.getUrl();
-    expect(url).to.be.eql('http://46.101.234.121/doctors');
-  });
-  it('should be able to log in', async function () {
-    await app.authPage.login({
-     email: 'john_admin2@admin.com',
-     password: 'Pa44word',
+      );
+    
+      const profileLink = await $('a[href="/user-profile/10b17307-24a9-4893-a841-4f3b5a0899e2"]')
+        await profileLink.click();
+          
+        await app.profilePage.selecting ({
+            specialty: 'dentist',
+            clinic: 'UCSFMedicalCenter',
+                
+        });
+        await browser.waitUntil(
+          async function () {
+            const myClinic = await browser.$('div[id="react-select-9-option-4"]');
+            return myClinic === 'UCSF Medical Center';
+          },
+          { timeout: 5000 },
+        );
+    
+    
+        const mySpecialty = $('div[id="react-select-8-option-2"]');
+        expect(mySpecialty).to.be.eql('dentist');
+    
+    
+        const myClinic = $('div[id="react-select-9-option-4"]');
+        expect(myClinic).to.be.eql('UCSF Medical Center');
+    
+    
+     });
     });
-
-    await browser.waitUntil(
-      async function () {
-        const url = await browser.getUrl();
-        return url === '/sign-in';
-      },
-      { timeout: 5000 },
-    );
-
-    const url = await browser.getUrl();
-    expect(url).to.be.eql('/sign-in');
-  });
-  });
-});
+    });
+    
